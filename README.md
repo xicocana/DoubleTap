@@ -5,7 +5,7 @@ Simple, sound activated(clap, clap ..), python script to control a relay board a
 
 ## Diagram
 
-<img src="https://github.com/xicocana/DoubleTap/blob/main/images/diagram.jpg" alt="Your image title" width="500"/>
+<img src="https://github.com/xicocana/DoubleTap/blob/main/diagram.jpg" alt="Your image title" width="500"/>
 
 ### References
 * tutorials-raspberrypi.com/rasperry-pi-control-relay-switch-via-gpio/
