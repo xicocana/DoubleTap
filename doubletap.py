@@ -1,9 +1,9 @@
 #import time
-#import RPi.GPIO as GPIO
+import RPi.GPIO as GPIO
 
-#GPIO.setmode(GPIO.BCM) # GPIO numbers instead of board numbers
-#RELAYS_1_GPIO = 17
-#GPIO.setup(RELAYS_1_GPIO, GPIO.OUT) # GPIO Assign mode
+GPIO.setmode(GPIO.BCM) # GPIO numbers instead of board numbers
+RELAYS_1_GPIO = 17
+GPIO.setup(RELAYS_1_GPIO, GPIO.OUT) # GPIO Assign mode
 
 #while(True):
     #time.sleep(1)
@@ -20,7 +20,7 @@ import wave
 import time
 import os
 
-Threshold = 10
+Threshold = 3
 
 SHORT_NORMALIZE = (1.0/32768.0)
 chunk = 1024
@@ -46,6 +46,7 @@ class Recorder:
         return rms * 1000
 
     def __init__(self):
+        self.flag = 0
         self.p = pyaudio.PyAudio()
         self.stream = self.p.open(format=FORMAT,
                                   channels=CHANNELS,
@@ -54,13 +55,21 @@ class Recorder:
                                   output=True,
                                   frames_per_buffer=chunk)
 
+    def changeState(self):
+        if(self.flag==0):
+            GPIO.output(RELAYS_1_GPIO, GPIO.HIGH)
+            self.flag = 1
+        else:
+            GPIO.output(RELAYS_1_GPIO, GPIO.LOW)
+            self.flag = 0
+
     def listen(self):
         print('Listening beginning')
         while True:
             input = self.stream.read(chunk)
             rms_val = self.rms(input)
             if rms_val > Threshold:
-                print("hello world")
+                self.changeState()
 
 a = Recorder()
 
